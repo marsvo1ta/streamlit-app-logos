@@ -1,20 +1,16 @@
-from os import getenv
 import requests
 from requests import Response
-from dotenv import load_dotenv
-
-
-load_dotenv()
+from streamlit import secrets
 
 
 class Logos:
     def __init__(self):
-        self.ngus_url = getenv('NGUS_URL')
-        self.npi_url = getenv('NPI_URL')
-        self.mw_ok = {'Authorization': f'Basic {getenv("MW_OK")}'}
-        self.always_data_url = getenv('ALWAYS_DATA_URL')
-        self.top_stage_url = getenv('TOP_STAGE_URL')
-        self.top_prod_url = getenv('TOP_PROD_URL')
+        self.ngus_url = secrets['NGUS_URL']
+        self.npi_url = secrets['NPI_URL']
+        self.mw_ok = {'Authorization': f'Basic {secrets["MW_OK"]}'}
+        self.always_data_url = secrets['ALWAYS_DATA_URL']
+        self.top_stage_url = secrets['TOP_STAGE_URL']
+        self.top_prod_url = secrets['TOP_PROD_URL']
 
     def iew_create(self, contour: str, body: dict) -> Response:
         url = {'ngus': self.ngus_url, 'npi': self.npi_url}
