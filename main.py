@@ -18,6 +18,6 @@ with search_tab:
         with sl.form('MW search'):
             sl.write("   ")
             search_text = sl.text_input("Search by iew number")
-            search_result = mw_input(search_text)
-            sl.write(search_result)
+            # search_result = mw_input(search_text)
+            # sl.write(search_result)
             sl.form_submit_button()
