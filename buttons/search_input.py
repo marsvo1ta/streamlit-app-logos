@@ -9,5 +9,3 @@ def mw_input(iew: str):
     response = logos.search_mw_by_iew(iew, SEARCH_MW_BODY)
     return response.json()
 
-
-print(mw_input('PC0000010000008483NPGSTAG'))
