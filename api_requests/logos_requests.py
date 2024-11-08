@@ -1,6 +1,6 @@
 import requests
 from requests import Response
-import streamlit as sl
+from streamlit import secrets
 import toml
 
 class Logos:
