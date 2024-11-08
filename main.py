@@ -19,6 +19,8 @@ with search_tab:
             sl.write("   ")
             search_text = sl.text_input("Search by iew number")
             sl.write(search_text)
-            # search_result = mw_input(search_text)
-            # sl.write(search_result)
-            sl.form_submit_button()
+            
+            submit = sl.form_submit_button()
+            if submit:
+                search_result = mw_input(search_text)
+                sl.write(search_result)
