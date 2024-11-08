@@ -32,6 +32,6 @@ class Logos:
     def search_mw_by_iew(self, iew: str, body: str) -> Response:
         url = self.search_mw_url
         body['request']['waybill_number'][0] = iew
-        response = requests.post(url, body, headers=self.mw_ok)
+        response = requests.post(url, json=body, headers=self.mw_ok)
         return response
 
