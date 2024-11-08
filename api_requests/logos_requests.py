@@ -1,7 +1,7 @@
 import requests
 from requests import Response
-from streamlit import secrets
-
+import streamlit as sl
+import toml
 
 class Logos:
     def __init__(self):
@@ -11,6 +11,7 @@ class Logos:
         self.always_data_url = secrets['ALWAYS_DATA_URL']
         self.top_stage_url = secrets['TOP_STAGE_URL']
         self.top_prod_url = secrets['TOP_PROD_URL']
+        self.search_mw_url = secrets['SEARCH_MW_URL']
 
     def iew_create(self, contour: str, body: dict) -> Response:
         url = {'ngus': self.ngus_url, 'npi': self.npi_url}
@@ -27,3 +28,10 @@ class Logos:
         body = {'iew': iew}
         response = requests.post(url, json=body)
         return response
+
+    def search_mw_by_iew(self, iew: str, body: str) -> Response:
+        url = self.search_mw_url
+        body['request']['waybill_number'][0] = iew
+        response = requests.post(url, body, headers=self.mw_ok)
+        return response
+
