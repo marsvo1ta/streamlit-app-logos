@@ -8,10 +8,11 @@ class Logos:
         self.ngus_url = secrets['NGUS_URL']
         self.npi_url = secrets['NPI_URL']
         self.mw_ok = {'Authorization': f'Basic {secrets["MW_OK"]}'}
+        self.top_auth = {'Authorization': f'Basic {secrets["TOP_AUTH"]}'}
         self.always_data_url = secrets['ALWAYS_DATA_URL']
         self.top_stage_url = secrets['TOP_STAGE_URL']
         self.top_prod_url = secrets['TOP_PROD_URL']
-        self.search_mw_url = secrets['SEARCH_MW_URL']
+        self.search_mw_url: str = secrets['SEARCH_MW_URL']
 
     def iew_create(self, contour: str, body: dict) -> Response:
         url = {'ngus': self.ngus_url, 'npi': self.npi_url}
@@ -29,9 +30,16 @@ class Logos:
         response = requests.post(url, json=body)
         return response
 
-    def search_mw_by_iew(self, iew: str, body: str) -> Response:
+    def search_mw_by_iew(self, iew: str, body: dict) -> Response:
         url = self.search_mw_url
         body['request']['waybill_number'][0] = iew
         response = requests.post(url, json=body, headers=self.mw_ok)
         return response
 
+    def search_top_by_iew(self, iew: str, body: dict, contour: str = 'ngus'):
+        url = self.search_mw_url
+        if contour == 'ngus':
+            url = url.replace('/npi', '/ngus')
+        body['request']['waybill_number'][0] = iew
+        response = requests.post(url, json=body, headers=self.top_auth)
+        return response
