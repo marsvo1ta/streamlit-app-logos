@@ -43,3 +43,9 @@ class Logos:
         body['request']['waybill_number'][0] = iew
         response = requests.post(url, json=body, headers=self.top_auth)
         return response
+
+    def search_mw_by_phone(self, phone: str, body: dict) -> Response:
+        url = self.search_mw_url
+        body['request']['counterparty']['phone_num_main'] = phone
+        response = requests.post(url, json=body, headers=self.mw_ok)
+        return response

@@ -44,3 +44,22 @@ SEARCH_MW_BODY = {
         "shipper.phone_num_main": 1
     }
 }
+
+SEARCH_MW_BODY_PHONE = {
+    "request": {
+        "counterparty": {
+            "phone_num_main": None
+        },
+        "state_in": [
+            "Created",
+            "Active",
+            "Draft"
+        ],
+        "created_at_ge": "1726451882",
+        "sort_by": "created_at",
+        "sort_type": "0",
+        "limit": "6",
+        "offset": "0",
+        "count_check": "1"
+    }
+}
