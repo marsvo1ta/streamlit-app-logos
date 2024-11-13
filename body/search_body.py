@@ -63,3 +63,17 @@ SEARCH_MW_BODY_PHONE = {
         "count_check": "1"
     }
 }
+
+SEARCH_NPS_BODY = {
+    "company_id": "npi",
+    "request": {
+        "references": [
+            {
+                "num": None
+            }
+        ]
+    },
+    "limit": 50,
+    "offset": 0,
+    "count_check": 1
+}

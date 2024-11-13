@@ -9,10 +9,12 @@ class Logos:
         self.npi_url = secrets['NPI_URL']
         self.mw_ok = {'Authorization': f'Basic {secrets["MW_OK"]}'}
         self.top_auth = {'Authorization': f'Basic {secrets["TOP_AUTH"]}'}
+        self.nps_gb_auth = {'Authorization': f'Basic {secrets["NPS_GB_AUTH"]}'}
         self.always_data_url = secrets['ALWAYS_DATA_URL']
         self.top_stage_url = secrets['TOP_STAGE_URL']
         self.top_prod_url = secrets['TOP_PROD_URL']
         self.search_mw_url: str = secrets['SEARCH_MW_URL']
+        self.search_nps_url: str = secrets['SEARCH_NPS_URL']
 
     def iew_create(self, contour: str, body: dict) -> Response:
         url = {'ngus': self.ngus_url, 'npi': self.npi_url}
@@ -48,4 +50,10 @@ class Logos:
         url = self.search_mw_url
         body['request']['counterparty']['phone_num_main'] = phone
         response = requests.post(url, json=body, headers=self.mw_ok)
+        return response
+
+    def search_nps_by_iew(self, iew: str, body: dict) -> Response:
+        url = self.search_nps_url
+        body['request']['references'][0]['num'] = iew
+        response = requests.post(url, json=body, headers=self.nps_gb_auth)
         return response
