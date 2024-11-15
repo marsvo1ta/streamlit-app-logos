@@ -1,6 +1,7 @@
 import streamlit as sl
 from buttons.create_top_buttons import create_top
-from buttons.search_input import mw_search_form, top_search_form, mw_search_phone_form, nps_search_form
+from buttons.search_input import mw_search_form, top_search_form, mw_search_phone_form, nps_search_form, \
+    nps_search_phone_form, nps_track_form
 
 create_tab, search_tab = sl.tabs(["Create TOP", "Search"])
 
@@ -27,4 +28,11 @@ with search_tab:
         top_search_form()
 
     with np_sh_tab:
-        nps_search_form()
+        iew_tab, phone_tab = sl.tabs(["IEW", "Phone"])
+
+        with iew_tab:
+            nps_search_form()
+            nps_track_form()
+        with phone_tab:
+            nps_search_phone_form()
+

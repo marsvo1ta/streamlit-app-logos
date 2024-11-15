@@ -77,3 +77,17 @@ SEARCH_NPS_BODY = {
     "offset": 0,
     "count_check": 1
 }
+
+SEARCH_NPS_BODY_PHONE = {
+    "company_id": "npi",
+    "request": {
+        "counterparty": {
+            "phone_num_main": None
+        }
+
+    },
+    "state": "Closed",
+    "limit": 10,
+    "offset": 10,
+    "count_check": 1
+}

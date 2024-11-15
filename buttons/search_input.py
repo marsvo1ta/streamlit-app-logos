@@ -1,6 +1,7 @@
 import streamlit as sl
 from api_requests.logos_requests import Logos
-from body.search_body import SEARCH_MW_BODY, SEARCH_MW_BODY_PHONE, SEARCH_NPS_BODY
+from body.search_body import SEARCH_MW_BODY, SEARCH_MW_BODY_PHONE, SEARCH_NPS_BODY, SEARCH_NPS_BODY_PHONE
+from body.track_body import TRACK_BODY
 
 logos = Logos()
 
@@ -12,11 +13,6 @@ def mw_search_by_iew_input(iew: str) -> dict:
 
 def top_search_by_iew_input(iew: str) -> dict:
     response = logos.search_top_by_iew(iew, SEARCH_MW_BODY)
-    if response.status_code not in (200, 201):
-        return {"url": response.request.url,
-                "request_body": response.request.body,
-                "status_code": response.status_code,
-                "response_body": response.json()}
     return response.json()
 
 
@@ -27,6 +23,16 @@ def mw_search_by_phone_input(phone: str) -> dict:
 
 def nps_search_by_iew_input(iew: str) -> dict:
     response = logos.search_nps_by_iew(iew, SEARCH_NPS_BODY)
+    return response.json()
+
+
+def nps_search_by_phone_input(phone: str) -> dict:
+    response = logos.search_nps_by_phone(phone, SEARCH_NPS_BODY_PHONE)
+    return response.json()
+
+
+def get_track_input(proj: str, iew: str) -> dict:
+    response = logos.get_track(proj, iew, TRACK_BODY)
     return response.json()
 
 
@@ -63,7 +69,34 @@ def mw_search_phone_form():
 def nps_search_form():
     with sl.form('NPS search'):
         search_text_nps = sl.text_input("Search by iew number")
-        submit = sl.form_submit_button()
+        submit = sl.form_submit_button('Search')
         if all((submit, search_text_nps)):
             search_result = nps_search_by_iew_input(search_text_nps)
             sl.write(search_result)
+
+
+def nps_search_phone_form():
+    with sl.form('NPS search by phone'):
+        sl.write("   ")
+        search_text_nps = sl.text_input("Search by phone number")
+        search_submit = sl.form_submit_button('Search')
+        if all((search_submit, search_text_nps)):
+            search_result = nps_search_by_phone_input(search_text_nps)
+            sl.write(search_result)
+
+
+
+def nps_track_form():
+    with sl.form('NPS track'):
+        search_text_nps = sl.text_input("Get track by iew number")
+        submit = sl.form_submit_button('Get track')
+        if all((submit, search_text_nps)):
+            search_result = get_track_input('nps', search_text_nps)
+            if search_result:
+                tracking_history = search_result['result']['data'][0]['tracking_history']
+                short_track_info = []
+                for track in tracking_history:
+                    short_track_info.append({track['code']: track['description']})
+            sl.json(short_track_info)
+
+
