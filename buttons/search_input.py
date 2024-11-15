@@ -69,10 +69,22 @@ def mw_search_phone_form():
 def nps_search_form():
     with sl.form('NPS search'):
         search_text_nps = sl.text_input("Search by iew number")
-        submit = sl.form_submit_button('Search')
-        if all((submit, search_text_nps)):
+        col1, col2 = sl.columns(2)
+        with col1:
+            search_submit = sl.form_submit_button('Search', use_container_width=True)
+        with col2:
+            track_submit = sl.form_submit_button('Track', use_container_width=True)
+        if all((search_submit, search_text_nps)):
             search_result = nps_search_by_iew_input(search_text_nps)
             sl.write(search_result)
+        if all((track_submit, search_text_nps)):
+            track_result = get_track_input('nps', search_text_nps)
+            if track_result:
+                tracking_history = track_result['result']['data'][0]['tracking_history']
+                short_track_info = []
+                for track in tracking_history:
+                    short_track_info.append({track['code']: track['description']})
+                sl.json(short_track_info)
 
 
 def nps_search_phone_form():
@@ -84,19 +96,5 @@ def nps_search_phone_form():
             search_result = nps_search_by_phone_input(search_text_nps)
             sl.write(search_result)
 
-
-
-def nps_track_form():
-    with sl.form('NPS track'):
-        search_text_nps = sl.text_input("Get track by iew number")
-        submit = sl.form_submit_button('Get track')
-        if all((submit, search_text_nps)):
-            search_result = get_track_input('nps', search_text_nps)
-            if search_result:
-                tracking_history = search_result['result']['data'][0]['tracking_history']
-                short_track_info = []
-                for track in tracking_history:
-                    short_track_info.append({track['code']: track['description']})
-            sl.json(short_track_info)
 
 
