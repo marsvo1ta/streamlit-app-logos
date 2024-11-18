@@ -3,6 +3,7 @@ from requests import Response
 from streamlit import secrets
 import toml
 
+
 class Logos:
     def __init__(self):
         self.ngus_url = secrets['NGUS_URL']
