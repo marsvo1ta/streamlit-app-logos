@@ -1,20 +1,28 @@
 import streamlit as sl
 from buttons.create_top_buttons import create_top
 from email_validation.validate_email import authenticate_user, is_valid_email
+from cookies_saver.cookies_manager import initialize_cookies, is_authenticated, set_authenticated
 from buttons.search_input import (
     mw_search_form,
     top_search_form,
     mw_search_phone_form,
     nps_search_form,
-    nps_search_phone_form
+    nps_search_phone_form,
 )
 
 
-if "authenticated" not in sl.session_state:
-    sl.session_state.authenticated = False
+cookies = initialize_cookies()
+if cookies is None:
+    sl.stop()
 
 
 def main():
+
+    if is_authenticated(cookies):
+        sl.session_state.authenticated = True
+
+    if "authenticated" not in sl.session_state:
+        sl.session_state.authenticated = False
 
     if sl.session_state.authenticated:
         show_application()
@@ -23,10 +31,11 @@ def main():
         if sl.button("Увійти"):
             if authenticate_user(email):
                 sl.session_state.authenticated = True
+                set_authenticated(cookies, True)
             elif not is_valid_email(email):
                 sl.error("Email не валідний")
             else:
-                sl.error("Ваш email ще не був доданий в систему ")
+                sl.error("Ваш email ще не був доданий в систему")
         else:
             sl.warning("Введіть ваш email, щоб отримати доступ.")
 
@@ -38,9 +47,9 @@ def show_application():
         sl.write("   ")
         ngus_tab, npi_tab = sl.tabs(["Create NGUS", "Create NPI"])
         with ngus_tab:
-            create_top('ngus')
+            create_top("ngus")
         with npi_tab:
-            create_top('npi')
+            create_top("npi")
 
     with search_tab:
         mw_tab, top_tab, np_sh_tab = sl.tabs(["MW", "TOP", "NPSH"])
