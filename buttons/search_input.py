@@ -61,10 +61,23 @@ def mw_search_form():
 def top_search_form():
     with sl.form('TOP search'):
         search_text_top = sl.text_input("Search by iew number")
-        submit = sl.form_submit_button()
-        if all((submit, search_text_top)):
+        col1, col2 = sl.columns(2)
+        with col1:
+            search_submit = sl.form_submit_button('Search', use_container_width=True)
+        with col2:
+            track_submit = sl.form_submit_button('Track', use_container_width=True)
+        if all((search_submit, search_text_top)):
             search_result = top_search_by_iew_input(search_text_top)
             sl.write(search_result)
+        if all((track_submit, search_text_top)):
+            track_result = get_track_input('top', search_text_top)
+            print(track_result)
+            if track_result:
+                tracking_history = track_result['result']['data'][0]['tracking_history']
+                short_track_info = []
+                for track in tracking_history:
+                    short_track_info.append({track['code']: track['description']})
+                sl.json(short_track_info)
 
 
 def mw_search_phone_form():
