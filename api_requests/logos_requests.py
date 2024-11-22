@@ -17,6 +17,25 @@ class Logos:
         self.search_mw_url: str = secrets['SEARCH_MW_URL']
         self.search_nps_url: str = secrets['SEARCH_NPS_URL']
         self.track_url: str = secrets['TRACK_URL']
+        self.cancel_url = secrets['CANCEL_URL']
+        self.cancel_url_2 = secrets['CANCEL_URL_2']
+
+    def choice_dict(self) -> dict:
+        choice = {
+            'mw': {
+                'auth': self.mw_ok,
+                'url': self.cancel_url
+            },
+            'top': {
+                'auth': self.top_auth,
+                'url': self.cancel_url
+            },
+            'nps': {
+                'auth': self.nps_gb_auth,
+                'url': self.cancel_url_2
+            }
+        }
+        return choice
 
     def iew_create(self, contour: str, body: dict) -> Response:
         url = {'ngus': self.ngus_url, 'npi': self.npi_url}
@@ -75,3 +94,15 @@ class Logos:
             print(body['request'])
         response = requests.post(url, json=body, headers=choice[project])
         return response
+
+    def cancel_waybill_by_iew(self, project: str, iew: str, body: dict) -> Response:
+        choice = self.choice_dict()
+        url = f"{choice[project]['url']}?waybill_number={iew}" if project != 'nps' else f"{choice[project]['url']}"
+        response = requests.post(url, json=body, headers=choice[project]['auth'])
+        if response.status_code == 404:
+            url = url.replace('/npi', '/ngus')
+            response = requests.post(url, json=body, headers=choice[project]['auth'])
+        return response.json()
+
+    def cancel_waybill_by_phone(self, project: str, phone: str, body: dict) -> Response:
+        pass
