@@ -6,7 +6,7 @@ logos = Logos()
 
 def mw_cancel_form():
     with sl.form('Cancel mw by iew'):
-        cancel_text = sl.text_input('Cancel mw by iew')
+        cancel_text = sl.text_input('Cancel by iew')
 
         submit = sl.form_submit_button('Cancel')
         if all((submit, cancel_text)):
