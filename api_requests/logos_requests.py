@@ -1,6 +1,7 @@
 import requests
 from requests import Response
 from streamlit import secrets
+from analyze_nps_country.analyze_nps_country_by_iew import analyze_country
 import toml
 
 
@@ -79,6 +80,11 @@ class Logos:
         response = requests.post(url, json=body, headers=self.nps_gb_auth)
         return response
 
+    def get_api_order(self, iew: str, body: dict) -> str:
+        response = self.search_nps_by_iew(iew, body).json()
+        api_order = [i['num'] for i in response['result'][0]['references'] if i['type'] == 'api_order'][0]
+        return api_order
+
     def search_nps_by_phone(self, phone: str, body: dict) -> Response:
         url = self.search_nps_url
         body['request']['counterparty']['phone_num_main'] = phone
@@ -98,7 +104,10 @@ class Logos:
     def cancel_waybill_by_iew(self, project: str, iew: str, body: dict) -> Response:
         choice = self.choice_dict()
         url = f"{choice[project]['url']}?waybill_number={iew}" if project != 'nps' else f"{choice[project]['url']}"
-        response = requests.post(url, json=body, headers=choice[project]['auth'])
+        headers = choice[project]['auth'] if project != 'nps' else analyze_country(iew)
+        if project == 'nps':
+            body['request']['api_order'] = iew
+        response = requests.post(url, json=body, headers=headers)
         if response.status_code == 404:
             url = url.replace('/npi', '/ngus')
             response = requests.post(url, json=body, headers=choice[project]['auth'])

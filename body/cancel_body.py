@@ -3,3 +3,10 @@ CANCEL_MW_BODY = {
         "resolution": "Canceled"
     }
 }
+
+CANCEL_NPS_BODY = {
+        "company_id": "npi",
+        "request": {
+                "api_order": None
+            }
+}
