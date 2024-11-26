@@ -1,5 +1,4 @@
 import streamlit as sl
-from streamlit import secrets
 from buttons.create_top_buttons import create_top
 from email_validation.validate_email import authenticate_user, is_valid_email
 from cookies_saver.cookies_manager import initialize_cookies, is_authenticated, set_authenticated

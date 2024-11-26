@@ -6,6 +6,33 @@ from body.track_body import TRACK_BODY
 logos = Logos()
 
 
+def nps_short_search_response(search_result: dict):
+    shipper = search_result[0]['shipper']
+    consignee = search_result[0]['consignee']
+    pickup_address = shipper['pickup_address']
+    delivery_address = consignee['delivery_address']
+    references = search_result[0]['references']
+    for i in references:
+        del i['partner_alias']
+        del i['enable_tracking']
+        del i['id']
+        if i.get('data'):
+            del i['data']
+    del pickup_address['warehouse_data']
+    del pickup_address['country_data']
+    del pickup_address['latitude']
+    del pickup_address['longitude']
+    del shipper['address']
+    del shipper['service_data']
+
+    del delivery_address['warehouse_data']
+    del delivery_address['country_data']
+    del delivery_address['latitude']
+    del delivery_address['longitude']
+    del consignee['address']
+    del consignee['service_data']
+
+
 def mw_search_by_iew_input(iew: str) -> dict:
     response = logos.search_mw_by_iew(iew, SEARCH_MW_BODY)
     return response.json()
@@ -101,7 +128,10 @@ def nps_search_form():
             track_submit = sl.form_submit_button('Track', use_container_width=True)
         if all((search_submit, search_text_nps)):
             search_result = nps_search_by_iew_input(search_text_nps)
-            sl.write(search_result)
+            if search_result.get('result'):
+                search_result = search_result['result']
+                nps_short_search_response(search_result)
+            sl.json(search_result)
         if all((track_submit, search_text_nps)):
             track_result = get_track_input('nps', search_text_nps)
             if track_result:
