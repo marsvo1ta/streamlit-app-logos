@@ -12,25 +12,22 @@ def nps_short_search_response(search_result: dict):
     pickup_address = shipper['pickup_address']
     delivery_address = consignee['delivery_address']
     references = search_result[0]['references']
-    for i in references:
-        del i['partner_alias']
-        del i['enable_tracking']
-        del i['id']
-        if i.get('data'):
-            del i['data']
-    del pickup_address['warehouse_data']
-    del pickup_address['country_data']
-    del pickup_address['latitude']
-    del pickup_address['longitude']
-    del shipper['address']
-    del shipper['service_data']
 
-    del delivery_address['warehouse_data']
-    del delivery_address['country_data']
-    del delivery_address['latitude']
-    del delivery_address['longitude']
-    del consignee['address']
-    del consignee['service_data']
+    fields_to_delete_references = ['partner_alias', 'enable_tracking', 'id', 'data']
+    fields_to_delete_address = ['warehouse_data', 'country_data', 'latitude', 'longitude']
+    fields_to_delete_entity = ['address', 'service_data']
+
+    for ref in references:
+        for field in fields_to_delete_references:
+            ref.pop(field, None)
+
+    for field in fields_to_delete_address:
+        pickup_address.pop(field, None)
+        delivery_address.pop(field, None)
+
+    for field in fields_to_delete_entity:
+        shipper.pop(field, None)
+        consignee.pop(field, None)
 
 
 def mw_search_by_iew_input(iew: str) -> dict:
