@@ -52,12 +52,13 @@ referencing==0.35.1
 requests==2.32.3
 rich==13.9.3
 rpds-py==0.20.0
+sdist==0.0.0
 six==1.16.0
 smmap==5.0.1
 soupsieve==2.6
 st-annotated-text==4.0.1
 st-theme==1.2.3
-streamlit==1.39.0
+streamlit==1.40.2
 streamlit-camera-input-live==0.2.0
 streamlit-card==1.0.2
 streamlit-cookies-manager==0.2.0
@@ -75,3 +76,4 @@ typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.2.3
 validators==0.34.0
+wheel==0.45.1

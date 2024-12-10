@@ -45,8 +45,8 @@ def mw_search_by_phone_input(phone: str) -> dict:
     return response.json()
 
 
-def nps_search_by_iew_input(iew: str) -> dict:
-    response = logos.search_nps_by_iew(iew, SEARCH_NPS_BODY)
+def nps_search_by_iew_input(iew: str, env: str) -> dict:
+    response = logos.search_nps_by_iew(iew, SEARCH_NPS_BODY, env)
     return response.json()
 
 
@@ -117,6 +117,7 @@ def mw_search_phone_form():
 
 def nps_search_form():
     with sl.form('NPS search'):
+        env_select = sl.selectbox('ENV', ('Prod', 'Stage'))
         search_text_nps = sl.text_input("Search by iew number")
         col1, col2 = sl.columns(2)
         with col1:

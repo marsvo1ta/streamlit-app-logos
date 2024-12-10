@@ -17,6 +17,7 @@ class Logos:
         self.top_prod_url = secrets['TOP_PROD_URL']
         self.search_mw_url: str = secrets['SEARCH_MW_URL']
         self.search_nps_url: str = secrets['SEARCH_NPS_URL']
+        self.search_nps_url_stage: str = self.search_nps_url.replace('api.', 'test-api.')
         self.track_url: str = secrets['TRACK_URL']
         self.cancel_url = secrets['CANCEL_URL']
         self.cancel_url_2 = secrets['CANCEL_URL_2']
@@ -74,8 +75,8 @@ class Logos:
         response = requests.post(url, json=body, headers=self.mw_ok)
         return response
 
-    def search_nps_by_iew(self, iew: str, body: dict) -> Response:
-        url = self.search_nps_url
+    def search_nps_by_iew(self, iew: str, body: dict, env: str) -> Response:
+        url = self.search_nps_url if env == 'Prod' else self.search_nps_url_stage
         body['request']['references'][0]['num'] = iew
         response = requests.post(url, json=body, headers=self.nps_gb_auth)
         return response
