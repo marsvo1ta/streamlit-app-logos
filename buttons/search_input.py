@@ -125,7 +125,7 @@ def nps_search_form():
         with col2:
             track_submit = sl.form_submit_button('Track', use_container_width=True)
         if all((search_submit, search_text_nps)):
-            search_result = nps_search_by_iew_input(search_text_nps)
+            search_result = nps_search_by_iew_input(search_text_nps, env_select)
             if search_result.get('result'):
                 search_result = search_result['result']
                 nps_short_search_response(search_result)
