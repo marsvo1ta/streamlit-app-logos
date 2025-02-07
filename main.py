@@ -25,27 +25,23 @@ if cookies is None:
 
 
 def main():
-
-    if is_authenticated(cookies):
-        sl.session_state.authenticated = True
-
     if "authenticated" not in sl.session_state:
-        sl.session_state.authenticated = False
+        sl.session_state.authenticated = is_authenticated(cookies)  # Авто-аутентифікація, якщо вже вхід виконано
 
     if sl.session_state.authenticated:
         show_application()
     else:
         email = sl.text_input("Введіть ваш email:")
-        if sl.button("Увійти"):
+
+        if sl.button("Увійти") and email:
             if authenticate_user(email):
                 sl.session_state.authenticated = True
                 set_authenticated(cookies, True)
+                sl.rerun()  # 🔹 Оновлення сторінки одразу після аутентифікації
             elif not is_valid_email(email):
                 sl.error("Email не валідний")
             else:
                 sl.error("Ваш email ще не був доданий в систему")
-        else:
-            sl.warning("Введіть ваш email, щоб отримати доступ.")
 
 
 def show_create_tab():
